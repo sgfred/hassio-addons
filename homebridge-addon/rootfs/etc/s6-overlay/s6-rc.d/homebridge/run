@@ -1,0 +1,50 @@
+#!/usr/bin/with-contenv bashio
+# ==============================================================================
+# Home Assistant Community Add-on: Homebridge
+# Runs Homebridge
+# ==============================================================================
+
+# Read options from HA addon config
+LOG_LEVEL=$(bashio::config 'log_level')
+bashio::log.info "Starting Homebridge with log level: ${LOG_LEVEL}"
+
+# Set the storage path to the addon data folder
+export UIX_STORAGE_PATH=/homebridge
+
+# Make sure the config directory exists and has correct permissions
+mkdir -p /homebridge
+chmod 777 /homebridge
+
+# Create a default config.json if it doesn't exist
+if [ ! -f "/homebridge/config.json" ]; then
+    bashio::log.info "No config.json found, creating a default one..."
+    cat > /homebridge/config.json <<EOF
+{
+    "bridge": {
+        "name": "Homebridge",
+        "username": "CC:22:3D:E3:CE:30",
+        "port": 51826,
+        "pin": "031-45-154"
+    },
+    "description": "Homebridge on Home Assistant",
+    "accessories": [],
+    "platforms": [
+        {
+            "name": "Config",
+            "port": 8581,
+            "platform": "config"
+        }
+    ]
+}
+EOF
+fi
+
+bashio::log.info "Homebridge config directory: /homebridge"
+bashio::log.info "Web UI available on port 8581"
+bashio::log.info "Default PIN: 031-45-154 (change this in the web UI!)"
+
+# Start Homebridge using the official entrypoint
+exec /bin/homebridge \
+    --allow-interfaces=eth0 \
+    -U /homebridge \
+    2>&1

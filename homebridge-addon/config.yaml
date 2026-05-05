@@ -1,0 +1,25 @@
+name: Homebridge
+version: "1.0.0"
+slug: homebridge
+description: Run Homebridge to bring HomeKit support to non-native devices.
+url: https://homebridge.io
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+init: false
+homeassistant_api: false
+hassio_api: false
+host_network: true
+ports_description:
+  8581/tcp: Homebridge Web UI
+ports:
+  8581/tcp: 8581
+map:
+  - config:rw
+options:
+  log_level: info
+schema:
+  log_level: list(trace|debug|info|warn|error)
+image: homebridge/homebridge:{arch}
