@@ -21,5 +21,6 @@ map:
 options:
   log_level: info
 schema:
-  log_level: list(trace|debug|info|warn|error)
-image: homebridge/homebridge:{arch}
+  log_level: list(trace|debug|info|warn|
+image: ghcr.io/sgfred/hassio-addons/{arch}-homebridge
+
